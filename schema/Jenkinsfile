@@ -34,18 +34,20 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
+        stage('install dependencies') {
             steps {
                 sh """
-                  echo 'my shell script'
-                   echo $greetings
-                  
+                 npm install
                 """
+            }
+        }
+        stage('build') {
+            steps {
+                sh """
+                  ls -la
+        
+                """  
+                
             }
         }
         
