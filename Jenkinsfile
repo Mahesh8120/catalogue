@@ -7,6 +7,7 @@ pipeline {
 }
      environment { 
         packageVersion = ''
+        nexusURL =  "http://35.171.162.250:8081/repository/catalogue/"
      }
      options {
         timeout(time: 1, unit: 'HOURS')
@@ -52,20 +53,38 @@ pipeline {
                 
             }
         }
-        
-    }
-        post { 
-            always { 
-                 echo 'I will always say Hello again!'
-                 deleteDir()
-            }
-             failure { 
-                 echo 'this runs when pipeline is failed, used generally to send some alerts'
-            }
-             success{
-                 echo 'I will say Hello when pipeline is success'
-            }
+        stage('publish artifact') {
+                    steps {
+                            nexusArtifactUploader {
+                        nexusVersion: ('nexus3'),
+                        protocol: ('http'),
+                        nexusUrl: "$(nexusURL)",
+                        groupId: 'com.roboshop',
+                        version: "$(packageVersion)",
+                        repository: 'catalogue',
+                        credentialsId: 'nexus',
+                        artifact {
+                            artifactId: 'catalogue',
+                            type: ('zar'),
+                            classifier: '',
+                            file: 'catalogue.zip'
+                    }
+                }
+            }         
         }
+    }        
+    post { 
+        always { 
+            echo 'I will always say Hello again!'
+            deleteDir()
+        }
+        failure { 
+        echo 'this runs when pipeline is failed, used generally to send some alerts'
+        }
+        success{
+        echo 'I will say Hello when pipeline is success'
+        }
+    }
     
 }
     
