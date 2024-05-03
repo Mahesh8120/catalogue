@@ -44,7 +44,16 @@ pipeline {
                 """
             }
         }
-         stage('Build') {
+        stage('Build') {
+            steps {
+                sh """
+                    ls -la
+                    zip -q -r catalogue.zip ./* -x ".git" -x "*.zip"
+                    ls -ltr
+                """
+            }
+        }
+         stage('publish artifact') {
             steps {
                  nexusArtifactUploader(
                     nexusVersion: 'nexus3',
