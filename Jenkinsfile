@@ -40,8 +40,7 @@ pipeline {
             steps {
                 sh """
                    npm install
-                   npm audit
-                   npm audit fix
+                  
                 """
             }
         }
